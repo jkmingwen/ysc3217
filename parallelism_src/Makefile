@@ -1,10 +1,10 @@
 default : main
 
 OBJS = sudoku_main.o srcs/sudoku_seq.o srcs/sudoku_proc.o srcs/sudoku_pthreads.o
-CFLAGS = -I./include
+CFLAGS = -pthread -I./include
 
 main : $(OBJS)
-	gcc -o main $(OBJS)
+	gcc -o main $(OBJS) $(CFLAGS)
 
 # VPATH sets alternative directories if file not found in current dir
 VPATH = include:../srcs
