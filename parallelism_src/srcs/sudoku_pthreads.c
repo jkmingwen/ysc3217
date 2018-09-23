@@ -100,7 +100,7 @@ int checkSudoku_pthreads(int *S)
     }
 
     printf("%s\n", result? "Sudoku invalid" : "Sudoku valid");
-    return 0;
+    return result;
 }
 
 // Function to check validity of a row in a sudoku solution
