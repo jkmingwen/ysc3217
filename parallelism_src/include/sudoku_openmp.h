@@ -1,2 +1,2 @@
-int checkArray(int n[]);
-int checkSudoku(int *);
+int checkArray_openmp(int []);
+int checkSudoku_openmp(int *);

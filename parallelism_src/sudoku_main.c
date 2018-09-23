@@ -2,6 +2,7 @@
 #include "sudoku_seq.h"
 #include "sudoku_proc.h"
 #include "sudoku_pthreads.h"
+#include "sudoku_openmp.h"
 
 int main()
 {
@@ -53,5 +54,9 @@ int main()
     checkSudoku_pthreads(*sudoku_valid);
     checkSudoku_pthreads(*sudoku_invalid);
     checkSudoku_pthreads(*sudoku_invalid_range);
+    printf("OpenMP:\n");
+    checkSudoku_openmp(*sudoku_valid);
+    checkSudoku_openmp(*sudoku_invalid);
+    checkSudoku_openmp(*sudoku_invalid_range);
     return 0;
 }
