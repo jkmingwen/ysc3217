@@ -1,6 +1,7 @@
 default : main
 
-OBJS = sudoku_main.o srcs/sudoku_seq.o srcs/sudoku_proc.o srcs/sudoku_pthreads.o srcs/sudoku_openmp.o
+OBJS = sudoku_main.o srcs/sudoku_seq.o srcs/sudoku_proc.o \
+	srcs/sudoku_pthreads.o srcs/sudoku_openmp.o
 DEPS = sudoku_seq.h sudoku_proc.h sudoku_pthreads.h sudoku_openmp.h
 CFLAGS = -pthread -fopenmp -I./include
 
