@@ -1,0 +1,35 @@
+\documentclass[parallelismlabreport.tex]{subfiles}
+
+\begin{document}
+
+\section{Sequential implementation}
+\subsection{checkArray\_seq function}
+The first thing I did was to implement a function that would take in an array of digits; it would ensure that the digits were between 1 and 9, and then check if there were any repeated digits in the given array. The code for this function follows:
+\begin{lstlisting}[language=C]
+int checkArray_seq(int n[])
+{
+    int counter = 0;
+
+    for (int j = 0; j < 9; j++) // this acts as our checker array
+    {
+	for (int i = 0; i < 9; i++)
+	{
+	    if (n[i] == j + 1)
+	    {
+		counter++;
+		break;
+	    }
+	}
+    }
+    if (counter != 9)
+    {
+	return 1;
+    }
+}
+\end{lstlisting}
+Each element of the input array, \verb|n[i]| is compared with the variable \verb|j + 1| (this starts with 1). The moment an element matches, the \verb|counter| is incremented by 1 and the \verb|break| function is called. The elements of the input array are then compared to the subsequent digit (in this case, 2). As \verb|j + 1| is only matched to its first match, a valid sudoku solution should result in a final \verb|counter| value of 9. If it is any value other than 9, the solution is invalid and the function returns 1.
+\subsection{checkSudoku\_seq function}
+The \verb|checkSudoku_seq| function takes in a pointer to a 2 dimensional array flattened in memory to a 1 dimensional array. It then checks --- in sequence --- the rows, columns and 3x3 grids for validity as a sudoku solution using the \verb|checkArray_seq| function. It returns its result to \verb|sudoku_fail| --- an array of 27 elements. Finally, using the OR boolean operator, the array of results are checked for any instances of 1s. If, after running the check, all elements of \verb|sudoku_fail| are 0, the solution is declared valid. Otherwise, the solution is declared invalid.
+\subsection{Difficulties faced}
+The two challenges faced in writing this solution were (1) figuring out a way to check for repeating digits, and (2) checking the 3x3 grids by traversing a one dimensional array. The solution might not be the most elegant --- especially the way it traverses through the 3x3 grids --- but it does work for the tests implemented.
+\end{document}

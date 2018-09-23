@@ -1,0 +1,22 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[left=5cm, right=5cm, top=2cm]{geometry}
+\usepackage{listings} % this is to allow code formatting in document
+\usepackage{subfiles}
+
+\title{Parallelism Lab Report}
+\author{Jaime Koh}
+\date{23 September 2018}
+
+\begin{document}
+
+\maketitle
+
+\subfile{sequential_implementation}
+\subfile{proc_implementation}
+\subfile{pthread_implementation}
+\subfile{openmp_implementation}
+
+%\section{Conclusion}
+%The biggest takeaway for me from this lab was the amount of time taken to understand parallelism. While implementing it is one thing, trying to make it more efficient than a sequential implementation requires one to design their code to function well in parallel.
+\end{document}

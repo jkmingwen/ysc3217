@@ -1,0 +1,22 @@
+\documentclass[parallelismlabreport.tex]{subfiles}
+
+\begin{document}
+\section{PThread Implementation}
+\subsection{checkArray function}
+In order to use the \verb|pthread_create| function, the return type and implementation of \verb|checkArray_pthreads| had to be altered from previous iterations to take in and unparse parameters. The parameters include the index of the check as well as the sudoku solution to be checked. The same method is used to check the validity of the sudoku solution as before. The difference is that \verb|sudoku_fail| had to be initialised as a global variable so that the threads are able to write to it instead of returning 1 or 0 as it has to have a return type \verb|void|.
+
+\subsection{checkSudoku function}
+After storing an array of a row, column, or grid, a thread is created to check the validity of the sudoku solution in the array. The result of the check is stored in \verb|sudoku_fail|. \verb|pthread_join| is called 27 times after the the checks are done. The parent thread then checks the entries in \verb|sudoku_fail| for the results. It prints \verb|"Sudoku invalid"| if any 1s are found in the array and \verb|"Sudoku valid"| if it does not.
+
+\subsection{Difficulties faced}
+The main difficulty was trying to understand how to pass multiple parameters into the \verb|checkArray_pthreads| function. \verb|pthread_create| only allowed for one argument of type \verb|void *| and so a \verb|parameters| type had to be created in order to store the various arguments to pass to each thread to hold the index of the check and the array to be checked.
+%The \verb|parameters| definition follows:
+%\begin{lstlisting}[language=c]
+%typedef struct
+%{
+%    int sf_index;
+%    int *input_array;
+%} parameters;
+%\end{lstlisting}
+These parameters allow the thread to check its corresponding array and write its result into its corresponding index in \verb|sudoku_fail|. Another difficulty was trying to understand how to properly use threads. This, once again, stems from the fact that the \verb|pthread_create| function only takes one argument of type \verb|void *| to be passed to the function that the thread runs --- which also has to have a return type \verb|void *|. Every time a thread is utilised for a different purpose, a function has to be written specifically to accommodate the types required by the \verb|pthread_create| function.
+\end{document}

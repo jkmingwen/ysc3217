@@ -1,0 +1,76 @@
+\documentclass[parallelismlabreport.tex]{subfiles}
+
+\begin{document}
+\section{Parallel processes implementation}
+\subsection{checkArray\_proc function}
+The \verb|checkArray_proc| function is identical to the \verb|checkArray_seq| function.
+
+\subsection{checkSudoku function}
+The only changes made to the \verb|checkSudoku_proc| function was creating multiple processes to check the rows, columns, and grids of the sudoku solution. 
+%An abridged version of the code follows:
+%\begin{lstlisting}[language=C]
+%int checkSudoku(int *S)
+%{
+%    // allocate shared memory
+%    int shm_id = shmget(19, (27 * sizeof(int)), IPC_CREAT | 0666);
+%    if (shm_id < 0) // catch failures
+%    {
+%	perror("shmget");
+%	exit(EXIT_FAILURE);
+%    }
+%    
+%    // attach variable to shared memory
+%    int *sudoku_fail = (int *) shmat (shm_id, NULL, 0);
+%    
+%    for (int r = 0, shm_index = 0; r < 73; r += 9, shm_index++)
+%    {
+%	pid_t pid;
+%	pid = fork();
+%	
+%	if (pid < 0)
+%	{
+%	    perror("fork");
+%	    exit(EXIT_FAILURE);
+%	}
+%	else if (pid == 0)
+%	{
+%	    int row[9];
+%	    int rowIndex = 0;
+%	    int rowEnd = r + 9; // set row index limit
+%	    for (int c = r; c < rowEnd; c++)
+%	    {
+%		row[rowIndex] = S[c];
+%		rowIndex++;
+%	    }
+%	    sudoku_fail[shm_index] = checkArray(row);
+%	    shmdt(sudoku_fail);
+%	    exit(EXIT_SUCCESS);
+%	}
+%    }
+%    /* checks on columns and grids
+%    	.
+%    	.
+%    	.
+%    */
+%    for (int i = 0; i < 27; i++)
+%    {
+%	wait(NULL);
+%    }
+%
+%    int result = 0;
+%    for (int i = 0; i < 27; i++)
+%    {
+%	result = result || sudoku_fail[i];
+%    }
+%
+%    printf("%s\n", result? "Sudoku invalid" : "Sudoku valid");
+%    return result;
+%}
+%\end{lstlisting}
+%
+Implementing multiple processes starts with allocating a shared memory space using the \verb|shmget| function. The \verb|checkArray_proc| function is called on every row, column, and 3x3 grid of the sudoku solution --- a total of 27 times. Thus, memory for \verb|27 * sizeof(int)| is allocated. The variable \verb|sudoku_fail| is then attached to that shared memory. For each row, column, and 3x3 grid, a child processes is created using \verb|fork|. This child process will traverse the given structure (row, column, or grid) store its elements in an array, and use the \verb|checkArray_proc| function to check its validity. The results of which --- 0 for valid and 1 for invalid --- are stored in the array in shared memory, \verb|sudoku_fail|. After returning the result --- before the child process is terminated --- shared memory is detached using the \verb|shmdt| function. \verb|wait| is then called on all 27 processes in order to avoid zombie processes. 
+
+\subsection{Difficulties faced}
+The most difficult part of this implementation was trying to wrap my head around the idea of how to run multiple processes. Initial implementations would attempt to create processes in a \verb|for| loop without terminating them at the end and this would result in exponentially more child processes being created with each loop. I also attempted to separate the various structure traversals into separate functions and to terminate the process within the function, but this did not work either. It was difficult to understand the documentation on the system calls as well. The biggest breakthrough was learning to utilise shared memory space as a means to consolidate the results. Nonetheless, I suspect that process creation in this context might be too computationally expensive to be faster than a sequential implementation for a sudoku checker.
+
+\end{document}

@@ -1,0 +1,8 @@
+\documentclass[parallelismlabreport.tex]{subfiles}
+
+\begin{document}
+\section{OpenMP implementation}
+The OpenMP implementation was a lot simpler than the previous two implementations. The declaration \verb|#pragma omp parallel shared(sudoku_fail)| was called just before the various \verb|for| loops in the \verb|checkSudoku_openmp| function. Other than this, the code pretty much identical to the sequential implementation.
+\subsection{Difficulties faced}
+I'd say that the most difficult aspect of this implementation was reading through the documentation of OpenMP to understand the what exactly the declarations did as well as what was and was not allowed. For example, it took me awhile to realise that \verb|#pragma omp for| does not allow for \verb|for| loops with multiple variable initialisations in it.
+\end{document}
